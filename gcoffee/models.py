@@ -8,8 +8,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, unique=True, nullable=False)
     # relationships
-    user_batches = db.relationship('Batch', backref='batch_brewer', lazy=True)
-    user_reviews = db.relationship('Review', backref='review_author', lazy=True)
+    batches = db.relationship('Batch', backref='batch_brewer', lazy=True)
+    reviews = db.relationship('Review', backref='review_author', lazy=True)
 
     def __repr__(self):
         return f'User[ {self.student_id} ]'
@@ -41,7 +41,7 @@ class Batch(db.Model):
     reviews = db.relationship('Review', backref='batch_review', lazy=True)
 
     def __repr__(self):
-        return f'Batch[ {self.id}: {self.date_brewed} ]'
+        return f'Batch[ {self.id}: by {self.brewer} on {self.date_brewed} ]'
 
 
 class Coffee(db.Model):

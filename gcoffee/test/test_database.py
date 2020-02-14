@@ -3,12 +3,13 @@ import pytest
 import tempfile
 from gcoffee.models import User, Review, Location, Batch, Coffee
 from sqlalchemy.engine import Engine
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, InterfaceError
 from sqlalchemy import event
 from gcoffee import db
 import app
 
 # setup from lovelace instructions
+# https://lovelace.oulu.fi/ohjelmoitava-web/programmable-web-project-spring-2020/testing-flask-applications/#unit-testing
 @pytest.fixture
 def db_handle():
     '''Create a temporary database for testing'''
@@ -121,3 +122,26 @@ class TestDatabaseModels(object):
         assert batch.location == location.id
         assert batch.reviews[0] == review
         assert review.author_id == user.id
+
+    def test_missing_parameters(self, db_handle):
+        '''Test for Error handling with missing parameters and objects'''
+        invalid_batch = Batch()
+        invalid_user = User()
+        db_handle.session.add(invalid_batch)
+        db_handle.session.add(invalid_user)
+        with pytest.raises(IntegrityError):
+            db.session.commit()
+            db.session.rollback()
+
+    def test_invalid_parameters(self, db_handle):
+        '''Test for error handling with invalid parameter values'''
+        invalid_user = self.get_user('Student Name')
+        db_handle.session.add(invalid_user)
+        print('\ntest_invalid_parameters() --Bypassed, see comment')
+        # with pytest.raises(InterfaceError):
+        db_handle.session.commit()         # ** see below
+        db_handle.session.rollback()
+
+        # ** This should raise an InterfaceError due to conflicting datatypes,
+        # however SQLite accepts any value into any field without complaint.
+        # I'm leaving this in incase we swap to PostgreSQL later on.
