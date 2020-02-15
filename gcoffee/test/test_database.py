@@ -145,3 +145,57 @@ class TestDatabaseModels(object):
         # ** This should raise an InterfaceError due to conflicting datatypes,
         # however SQLite accepts any value into any field without complaint.
         # I'm leaving this in incase we swap to PostgreSQL later on.
+
+    def test_delete_object(self, db_handle):
+        '''Test if cascading relationships function on delete'''
+        self.test_create_instances(db_handle)
+        user = User.query.first()
+        db_handle.session.delete(user)
+        db_handle.session.commit()
+        assert User.query.count() == 0
+        assert Batch.query.count() == 0
+        assert Review.query.count() == 0
+
+        # Test if location, coffee still exist in db
+        assert Coffee.query.count() == 1
+        assert Location.query.count() == 1
+
+    def test_delete_object_batch(self, db_handle):
+        '''Test if cascading relationships function on delete, one further'''
+        self.test_create_instances(db_handle)
+        batch = Batch.query.first()
+        db_handle.session.delete(batch)
+        db_handle.session.commit()
+        # Check that batches and reviews were deleted
+        assert Batch.query.count() == 0
+        assert Review.query.count() == 0
+        # Check if users, coffees and locations still exist
+        assert User.query.count() == 1
+        assert Coffee.query.count() == 1
+        assert Location.query.count() == 1
+
+    def test_update_object(self, db_handle):
+        '''Test if cascading relationships function on parameter update'''
+        self.test_create_instances(db_handle)
+        User.query.first().id = 9  # primary key
+        db_handle.session.commit()
+        batch = Batch.query.first()
+        review = Review.query.first()
+        assert batch.brewer == 9
+        assert review.author_id == 9
+
+    def test_update_missing_object(self, db_handle):
+        '''Test if updating non-existing tables raises error'''
+        with pytest.raises(AttributeError):
+            user = User.query.first()
+            user.student_id = 1222020
+            db_handle.session.commit()
+
+        # Test updating recently deleted object
+        self.test_create_instances(db_handle)
+        batch = Batch.query.first()
+        db_handle.session.delete(batch)
+        db_handle.session.commit()
+
+        with pytest.raises(AttributeError):
+            Batch.query.first().amount = 2
