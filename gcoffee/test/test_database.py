@@ -28,7 +28,7 @@ def db_handle():
     os.close(db_fd)
     os.unlink(db_fname)
 
-
+# Setup Foreign Keys, from the same instructions as above
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
@@ -36,6 +36,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.close()
 
 
+# Unit test and setup as class methods
 class TestDatabaseModels(object):
     '''create objects for testing'''
     # setup methods
@@ -100,7 +101,6 @@ class TestDatabaseModels(object):
         dup_user = self.get_user()
         dup_coffee = self.get_coffee()
         dup_location = self.get_location()
-
         db_handle.session.add(dup_user)
         db_handle.session.add(dup_coffee)
         db_handle.session.add(dup_location)
@@ -161,7 +161,8 @@ class TestDatabaseModels(object):
         assert Location.query.count() == 1
 
     def test_delete_object_batch(self, db_handle):
-        '''Test if cascading relationships function on delete, one further'''
+        '''Test if cascading relationships function on delete,
+        one step further in the hierarchy'''
         self.test_create_instances(db_handle)
         batch = Batch.query.first()
         db_handle.session.delete(batch)
@@ -185,7 +186,7 @@ class TestDatabaseModels(object):
         assert review.author_id == 9
 
     def test_update_missing_object(self, db_handle):
-        '''Test if updating non-existing tables raises error'''
+        '''Test error handling with updating missing or deleted objects'''
         with pytest.raises(AttributeError):
             user = User.query.first()
             user.student_id = 1222020
