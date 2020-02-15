@@ -1,5 +1,4 @@
 # Guild Coffee; a brewer tracking api
-=====================================
 ## Setup
 We recommend you install and create a virtual enviroment first, then install the required extensions.
 To do this, first you must have python 3.x and python3-pip installed, then run these commands:
