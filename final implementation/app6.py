@@ -72,7 +72,7 @@ def get_users():
     return json.dumps(my_list)
 
 #get a user
-@app6.route("/api/users/<student_id>", methods=['GET'])
+@app6.route("/api/users/<student_id>/", methods=['GET'])
 def get_user(student_id):
     try:
         wanted_user = User.query.filter_by(student_id=student_id).first()
@@ -100,7 +100,7 @@ def delete_user(student_id):
         return "Request content type must be JSON", 415
 
 #edit a user
-@app6.route("/api/users/<student_id>", methods=['PUT'])
+@app6.route("/api/users/<student_id>/", methods=['PUT'])
 def edit_user(student_id):
     try:
         wanted_user = User.query.filter_by(student_id=student_id).first()
