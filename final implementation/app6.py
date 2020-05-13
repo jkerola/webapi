@@ -59,31 +59,6 @@ def index():
 
 
 
-
-# #get batches collection:
-# @app6.route("/api/batches/", methods=['GET'])
-# def get_batches():
-#     my_list = []
-#     batchList = []
-#     users = User.query.all()
-#     batch_items = Batch.query.all()
-#     for user in users:
-#         inventoryList = []
-        
-#         for batch_item in batch_items:
-#             if batch_item.brewer == user.id:
-#                 a_list = [batch_item.amount, batch_item.coffee]
-#                 batchList.append(a_list)
-                
-#         if len(batchList) != 0:
-#             recordObject = {'student_id': user.student_id,
-#                             'batches': batchList
-#                             }
-#             my_list.append(recordObject)
-
-
-#     return json.dumps(my_list)
-
 #get users collection
 @app6.route("/api/users/", methods=['GET'])
 def get_users():
