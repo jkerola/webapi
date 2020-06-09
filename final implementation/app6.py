@@ -15,7 +15,7 @@ db = SQLAlchemy(app6)
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.String(64), unique=True, nullable=False)
+    student_id = db.Column(db.Integer, unique=True, nullable=False)
     has_batches = db.relationship('Batch', back_populates='user')
     has_reviews = db.relationship('Review', back_populates='user')
 
@@ -59,6 +59,8 @@ def index():
 
 
 
+
+
 #get users collection
 @app6.route("/api/users/", methods=['GET'])
 def get_users():
@@ -66,7 +68,8 @@ def get_users():
     inventoryList = []
     users = User.query.all()
     for user in users:
-        recordObject = {'student_id': user.student_id}
+        recordObject = {'user_id': user.id,
+        'student_id': user.student_id}
         my_list.append(recordObject)
 
     return json.dumps(my_list)
@@ -85,19 +88,6 @@ def get_user(student_id):
     except (KeyError, ValueError, IntegrityError):
         return "Request content type must be JSON", 415
 
-#delete a user
-@app6.route("/api/users/<student_id>/", methods=['DELETE'])
-def delete_user(student_id):
-    try:
-        wanted_user = User.query.filter_by(student_id=student_id).first()
-        if wanted_user:
-            db.session.delete(wanted_user)
-            db.session.commit()
-            return "User was deleted", 200
-        else:
-            return "Student id not found", 404
-    except (KeyError, ValueError, IntegrityError):
-        return "Request content type must be JSON", 415
 
 #edit a user
 @app6.route("/api/users/<student_id>/", methods=['PUT'])
@@ -112,7 +102,7 @@ def edit_user(student_id):
         else:
             return "Student id not found", 404
     except (KeyError, ValueError, IntegrityError):
-        return "Request content type must be JSON", 415
+        return "New student id wanted is already taken", 415
 
 #add user
 @app6.route("/api/users/", methods=['POST'])
@@ -122,7 +112,7 @@ def add_user():
             student_id = int(request.json["student_id"])
             new_user_exist = User.query.filter_by(student_id=student_id).first()
             if new_user_exist:
-                return "User already exists", 409            
+                return "User already exists", 409           
             try:
                 student_id = int(request.json["student_id"])
                 new_user = User(
@@ -133,7 +123,7 @@ def add_user():
             except (KeyError, ValueError, IntegrityError):
                 return "Data entered is incorrect", 400
         except (KeyError, ValueError, IntegrityError):
-            return "Incomplete request - missing fields", 400
+            return "Incomplete request - missing fields or data incorrect", 400
     return "Request content type must be JSON", 415
 
 
@@ -148,7 +138,8 @@ def get_batches():
     batchList = []
     batches = Batch.query.all()
     for batch in batches:
-        recordObject = {'amount': batch.amount,
+        recordObject = { 'batch_id': batch.id,
+        'amount': batch.amount,
         'date_brewed': batch.date_brewed,
         'brewer': batch.brewer,
         'coffee': batch.coffee,
@@ -163,8 +154,8 @@ def get_batches():
 def get_batch(batch_id):
     try:
         wanted_batch = Batch.query.filter_by(id=batch_id).first()
-        wanted_user = User.query.filter_by(id=wanted_batch.brewer).first()
-        if wanted_batch: 
+        if wanted_batch:
+            wanted_user = User.query.filter_by(id=wanted_batch.brewer).first()
             recordObject = {'batch_id': wanted_batch.id,
             'amount': wanted_batch.amount,
             "date_brewed": wanted_batch.date_brewed,
@@ -204,8 +195,6 @@ def edit_batch(batch_id):
             wanted_batch.amount=updated_amount
             updated_date_brewed = int(request.json["date_brewed"])
             wanted_batch.date_brewed=updated_date_brewed
-            updated_brewer = int(request.json["brewer"])
-            wanted_batch.brewer=updated_brewer
             updated_coffee = int(request.json["coffee"])
             wanted_batch.coffee=updated_coffee
             updated_location = int(request.json["location"])
@@ -253,8 +242,10 @@ def get_reviews():
     reviewList = []
     reviews = Review.query.all()
     for review in reviews:
-        recordObject = {'value': review.value,
-        'author_id': review.author_id,
+        wanted_user = User.query.filter_by(id=review.author_id).first()
+        recordObject = { 'review_id': review.id,
+        'value': review.value,
+        'author_student_id': wanted_user.student_id,
         'batch_id': review.batch_id
         }
         my_list.append(recordObject)
@@ -266,8 +257,8 @@ def get_reviews():
 def get_review(review_id):
     try:
         wanted_review = Review.query.filter_by(id=review_id).first()
-        wanted_user = User.query.filter_by(id=wanted_review.author_id).first()
-        if wanted_review: 
+        if wanted_review:
+            wanted_user = User.query.filter_by(id=wanted_review.author_id).first()
             recordObject = {'review_id': wanted_review.id,
             'value': wanted_review.value,
             'author_student_id': wanted_user.student_id,

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <title>Batches Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+    </div>
+
+    <div class = "col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+        {% block content %}
+        {% endblock content %}   
+    </div>
+    <form id = "s1" >
+        <input type="submit" value="View all batches">
+    </form>
+    <p id="batches-all"></p>
+
+    <form id = "s2">
+        <label>Batch id:</label>
+        <input id="batch_id_view">
+        <input type="submit" value="View a batch">
+    </form>
+    <p id="view-batch"></p>
+
+    <form id = "s3" >
+        <label>Student id:</label>
+        <input id="user_id_post">
+        <label>Location:</label>
+        <input id="location_post">
+        <label>Amount:</label>
+        <input id="amount_post">
+        <label>Coffee:</label>
+        <input id="coffee_post">
+        <label>Date brewed:</label>
+        <input id="date_brewed_post">
+        <input type="submit" value="Add a batch">
+    </form>
+    <p id="add-batch"></p>
+
+    <form id = "s4" >
+        <label>Batch id:</label>
+        <input id="old_batch_id">
+        <label>Updated location:</label>
+        <input id="location_edit">
+        <label>Updated amount:</label>
+        <input id="amount_edit">
+        <label>Updated coffee:</label>
+        <input id="coffee_edit">
+        <label>Updated date brewed:</label>
+        <input id="date_brewed_edit">
+        <input type="submit" value="Edit a batch">
+    </form>
+    <p id="edit-batch"></p>
+
+    <form id = "s5">
+        <label>Batch id:</label>
+        <input id="batch_id_delete">
+        <input type="submit" value="Delete a batch">
+    </form>
+    <p id="delete-batch"></p>
+
+    
+    <form action="/home/" method="GET">
+      <input type="submit" value="Back home">
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/static/app2.js" ></script>
+    
+    
+</body>
+
+</html>

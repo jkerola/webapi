@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <title>Reviews Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+    </div>
+
+    <div class = "col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+        {% block content %}
+        {% endblock content %}   
+    </div>
+    <form id = "s1" >
+        <input type="submit" value="View all reviews">
+    </form>
+    <p id="reviews-all"></p>
+
+    <form id = "s2">
+        <label>Review id:</label>
+        <input id="review_id_view">
+        <input type="submit" value="View a review">
+    </form>
+    <p id="view-review"></p>
+
+    <form id = "s3" >
+        <label>Student id:</label>
+        <input id="student_id_post">
+        <label>Batch id:</label>
+        <input id="batch_id_post">
+        <label>Review value:</label>
+        <input id="review_value_post">
+        <input type="submit" value="Add a review">
+    </form>
+    <p id="add-review"></p>
+
+    <form id = "s4" >
+        <label>Batch id:</label>
+        <input id="batch_id_edit">
+        <label>Review id:</label>
+        <input id="old_review_id">
+        <label>Student id:</label>
+        <input id="student_id_edit">
+        <label>Updated review value:</label>
+        <input id="value_edit">
+        <input type="submit" value="Edit a review">
+    </form>
+    <p id="edit-review"></p>
+
+    <form id = "s5">
+        <label>Review id:</label>
+        <input id="review_id_delete">
+        <input type="submit" value="Delete a review">
+    </form>
+    <p id="delete-review"></p>
+
+    
+    <form action="/home/" method="GET">
+      <input type="submit" value="Back home">
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/static/app3.js" ></script>
+    
+    
+</body>
+
+</html>

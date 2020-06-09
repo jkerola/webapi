@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <title>Users Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+    </div>
+
+    <div class = "col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+        {% block content %}
+        {% endblock content %}   
+    </div>
+    <form id = "s1" >
+        <input type="submit" value="View all users">
+    </form>
+    <p id="users-all"></p>
+
+    <form id = "s2">
+        <label>Student id:</label>
+        <input id="student_id_view">
+        <input type="submit" value="View a user">
+    </form>
+    <p id="view-user"></p>
+
+    <form id = "s3" >
+        <label>Student id:</label>
+        <input id="user_id_post">
+        <input type="submit" value="Add a user">
+    </form>
+    <p id="add-user"></p>
+
+    <form id = "s4" >
+        <label>Old student id:</label>
+        <input id="old_student_id">
+        <label>Updated students id:</label>
+        <input id="updated_student_id">
+        <input type="submit" value="Edit a user">
+    </form>
+    <p id="edit-user"></p>
+
+    
+    <form action="/home/" method="GET">
+      <input type="submit" value="Back home">
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/static/app.js" ></script>
+    
+    
+</body>
+
+</html>
